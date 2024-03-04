@@ -118,7 +118,7 @@
 .sticky-cont {
     height: 15rem;
     width: 15rem;
-    background-color: aliceblue;
+    /* background-color: aliceblue; */
     position: absolute;
     top: 15rem;
     left: 10rem;
@@ -158,4 +158,9 @@ textarea {
     resize: none;
     outline: none;
     border: none;
+}
+
+img {
+    height: 100%;
+    width: 100%;
 }

@@ -8,6 +8,7 @@ let isEraserFlag = false;
 const pencilImg = document.querySelector(".pencil");
 const eraseImg = document.querySelector(".erase");
 const sticky = document.querySelector(".sticky");
+const upload = document.querySelector(".upload");
 
 // isOptionsFlag true -> show tools , false =>hide tools
 optionCont.addEventListener("click", (e) => {
@@ -49,27 +50,53 @@ eraseImg.addEventListener("click", (e) => {
   } else eraserToolCont.style.display = "none";
 });
 
-sticky.addEventListener("click", (e) => {
-  const stickyCont = document.createElement("div");
-  stickyCont.setAttribute("class", "sticky-cont");
-  stickyCont.innerHTML = `
+upload.addEventListener("click",()=>{
+  const input = document.createElement("input");
+  input.setAttribute("type", "file");
+  input.click();
+  input.addEventListener("change" , e=>{
+    const file = input?.files?.[0];
+    const url = URL.createObjectURL(file);
+    createSticky(`
     <div class="header-cont">
     <div class="minimize"></div>
     <div class="remove"></div>
-</div>
-<div class="note-cont">
-    <textarea></textarea>
-</div>
-    `;
-  document.body.appendChild(stickyCont);
-  stickyCont.onmousedown = function (event) {
-    dragAndDrop(stickyCont, event);
-  };
+    </div>
+    <div class="note-cont">
+        <img src="${url}" />
+    </div>
+    `)
+  })
+})
 
-  stickyCont.ondragstart = function () {
-    return false;
-  };
+sticky.addEventListener("click", (e) => {
+  createSticky(
+    ` <div class="header-cont">
+    <div class="minimize"></div>
+    <div class="remove"></div>
+    </div>
+    <div class="note-cont">
+        <textarea></textarea>
+    </div>`
+  )
 });
+
+function noteActions(minimize, remove, stickyCont) {
+  remove.addEventListener("click", (e) => {
+    console.log("remove sticky cont");
+    stickyCont.remove();
+  });
+
+  let isTextMinimised = false;
+  minimize.addEventListener("click",()=>{
+    isTextMinimised = !isTextMinimised;
+    const noteCont = stickyCont.querySelector(".note-cont");
+    if(isTextMinimised) {
+      noteCont.style.display = "none";
+    } else noteCont.style.display = "block";
+  })
+}
+
 
 function dragAndDrop(element, event) {
   let shiftX = event.clientX - element.getBoundingClientRect().left;
@@ -77,7 +104,6 @@ function dragAndDrop(element, event) {
 
   element.style.position = "absolute";
   element.style.zIndex = 1000;
-  document.body.append(element);
 
   moveAt(event.pageX, event.pageY);
 
@@ -99,5 +125,22 @@ function dragAndDrop(element, event) {
   element.onmouseup = function () {
     document.removeEventListener("mousemove", onMouseMove);
     element.onmouseup = null;
+  };
+}
+
+function createSticky(stickyTemplateHtml) {
+  const stickyCont = document.createElement("div");
+  stickyCont.setAttribute("class", "sticky-cont");
+  stickyCont.innerHTML = stickyTemplateHtml;
+  document.body.appendChild(stickyCont);
+  const minimize = stickyCont.querySelector(".minimize");
+  const remove = stickyCont.querySelector(".remove");
+  noteActions(minimize, remove , stickyCont);
+  stickyCont.onmousedown = function (event) {
+    dragAndDrop(stickyCont, event);
+  };
+
+  stickyCont.ondragstart = function () {
+    return false;
   };
 }
