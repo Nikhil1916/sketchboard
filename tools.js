@@ -76,14 +76,14 @@ sticky.addEventListener("click", (e) => {
     <div class="remove"></div>
     </div>
     <div class="note-cont">
-        <textarea></textarea>
+        <textarea spellcheck="false"></textarea>
     </div>`
   )
 });
 
 function noteActions(minimize, remove, stickyCont) {
   remove.addEventListener("click", (e) => {
-    console.log("remove sticky cont");
+    // console.log("remove sticky cont");
     stickyCont.remove();
   });
 
