@@ -9,6 +9,7 @@ const pencilImg = document.querySelector(".pencil");
 const eraseImg = document.querySelector(".erase");
 const sticky = document.querySelector(".sticky");
 const upload = document.querySelector(".upload");
+const download = document.querySelector(".download");
 
 // isOptionsFlag true -> show tools , false =>hide tools
 optionCont.addEventListener("click", (e) => {

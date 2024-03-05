@@ -86,3 +86,11 @@ eraseImg.addEventListener("click", e =>{
         tool.lineWidth = pencilWidth;
     }
 })
+
+download.addEventListener("click",(e)=>{
+    const a = document.createElement("a");
+    const url = canvas.toDataURL();
+    a.href = url;
+    a.download = "board.jpg";
+    a.click();
+  })
