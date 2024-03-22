@@ -59,20 +59,20 @@ upload.addEventListener("click", () => {
         const file = input?.files?.[0];
         const url = URL.createObjectURL(file);
         createSticky(`
-    <div class="header-cont">
-    <div class="minimize"></div>
-    <div class="remove"></div>
-    </div>
-    <div class="note-cont">
-        <img src="${url}" />
-    </div>
+        <div class="header-cont">
+        <div class="minimize"></div>
+        <div class="remove"></div>
+        </div>
+        <div class="note-cont">
+            <img src="${url}" />
+        </div>
     `)
     })
 })
 
 sticky.addEventListener("click", (e) => {
     createSticky(
-        ` <div class="header-cont">
+        `<div class="header-cont">
     <div class="minimize"></div>
     <div class="remove"></div>
     </div>
@@ -84,7 +84,6 @@ sticky.addEventListener("click", (e) => {
 
 function noteActions(minimize, remove, stickyCont) {
   remove.addEventListener("click", (e) => {
-    // console.log("remove sticky cont");
     stickyCont.remove();
   });
 
