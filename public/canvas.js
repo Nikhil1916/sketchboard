@@ -1,3 +1,5 @@
+// const { Socket } = require("socket.io");
+
 const canvas = document.querySelector("canvas");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -30,17 +32,27 @@ tool.lineWidth = pencilWidth;
 
 canvas.addEventListener("mousedown",e=>{
     mouseDown = true;   
-    beginPath({
+    // beginPath({
+    //     x: e.clientX, y:e.clientY
+    // })/
+    const data = {
         x: e.clientX, y:e.clientY
-    })
+    }
+    // send data to server
+    socket.emit("beginpath", data);
 });
 
 canvas.addEventListener("mousemove",e=>{
     if(mouseDown) {
-        drawStroke({
+        // drawStroke({
+        //     x: e.clientX, y:e.clientY , color: isEraserFlag ? eraserColor : penColor , 
+        //     width: isEraserFlag ? eraserWidth : pencilWidth
+        // })
+        const data = {
             x: e.clientX, y:e.clientY , color: isEraserFlag ? eraserColor : penColor , 
             width: isEraserFlag ? eraserWidth : pencilWidth
-        })
+        };
+        socket.emit("drawStroke", data);
     }
 });
 
@@ -105,19 +117,29 @@ download.addEventListener("click",(e)=>{
 
 undo.addEventListener("click",()=>{
     if(tracker > 0) tracker--;
-    undoRedoCanvas({
+    // undoRedoCanvas({
+    //     trackValue: tracker,
+    //     undoRedoTracker
+    // })
+    const data = {
         trackValue: tracker,
         undoRedoTracker
-    })
+    };
+    socket.emit("redoUndo", data);
 });
 
 redo.addEventListener("click",()=>{
     console.log("redo");
     if(tracker < undoRedoTracker.length - 1) tracker++;
-    undoRedoCanvas({
+    // undoRedoCanvas({
+    //     trackValue: tracker,
+    //     undoRedoTracker
+    // })
+    const data = {
         trackValue: tracker,
         undoRedoTracker
-    })
+    };
+    socket.emit("redoUndo", data);
 });
 
 function undoRedoCanvas(trackObj) {
@@ -130,3 +152,26 @@ function undoRedoCanvas(trackObj) {
         tool.drawImage(img,0,0,canvas.width, canvas.height);
     }
 }
+
+// data from server
+socket.on("beginpath",(data)=>{
+
+    beginPath(data);
+    
+});
+
+
+// data from server
+socket.on("drawStroke",(data)=>{
+    console.log(data);
+    drawStroke(data);
+    
+});
+
+// data from server
+socket.on("redoUndo",(data)=>{
+    console.log(data);
+    undoRedoCanvas(data);
+    
+});
+

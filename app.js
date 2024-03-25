@@ -12,6 +12,29 @@ const server = app.listen(port, ()=>{
 
 const io = socket(server);
 io.on("connection",(socket)=>{
-    // console.log(socket);
-    console.log("Made socket Connection")
+    console.log(socket);
+    console.log("Made socket Connection");
+
+    // recieve data from front end
+    socket.on("beginpath",(data)=>{
+
+        // transfer data to all connected computers
+        io.sockets.emit("beginpath", data);
+    });
+
+        // recieve data from front end
+        socket.on("drawStroke",(data)=>{
+
+            // transfer data to all connected computers
+            io.sockets.emit("drawStroke", data);
+        });
+
+           // recieve data from front end
+           socket.on("redoUndo",(data)=>{
+
+            // transfer data to all connected computers
+            io.sockets.emit("redoUndo", data);
+        });
+    
+
 });//on connection this emitter is invoked
